@@ -1,0 +1,62 @@
+﻿@model IEnumerable<MMDB_WebApp.Models.MovieVM>
+
+@{
+    ViewData["Title"] = "Home Page";
+
+    string message = "";
+
+    if (TempData.ContainsKey("forbidden"))
+    {
+        message = "You're not authorized to " + (string)TempData["forbiddenMessage"];
+        TempData.Remove("forbidden");
+        TempData.Remove("forbiddenMessage");
+    }
+    else if (TempData.ContainsKey("error"))
+    {
+        message = "An unknown error occurred while " + (string)TempData["errorMessage"];
+        TempData.Remove("error");
+        TempData.Remove("errorMessage");
+    }
+    else if (TempData.ContainsKey("jwt"))
+    {
+        message = (string)TempData["jwtMessage"];
+        TempData.Remove("jwt");
+        TempData.Remove("jwtMessage");
+    }
+}
+
+<div class="text-center">
+    @if (message != "")
+    {
+        <div class="alert alert-danger" role="alert">
+            @message
+        </div>
+    }
+<h1 class="display-4">@Localizer["Welcome"]</h1>
+</div>
+<div class="container">
+    <div class="row">
+        <h2 class="display-4">Recent movies</h2>
+    </div>
+    <div class="card-deck">
+        @foreach (var item in Model)
+        {
+            <div class="card">
+                @if (item.Poster != null)
+                {
+                    <img class="poster-img" src="~/images/Posters/@item.Poster" asp-append-version="true">
+                }
+                else
+                {
+                    <img src="~/images/Posters/not_available.jpg">
+                }
+            <div class="card-body">
+                <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
+                <p class="card-text">@Html.DisplayFor(modelItem => item.ReleaseDate)</p>
+                <a asp-controller="Movies" asp-action="Details" asp-route-id="@item.Id" class="stretched-link">Details</a>
+            </div>
+
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,68 @@
+﻿@using Microsoft.AspNetCore.Http
+
+@{
+    string FullName = null;
+    string Id = null;
+
+    if (TempData.ContainsKey("StateData"))
+    {
+        Dictionary<string, string> stateData = (Dictionary<string, string>)TempData["StateData"];
+
+        FullName = stateData["_FullName"];
+        Id = stateData["_Id"];
+    }
+
+    TempData.Keep();
+
+    var routeData = ViewContext.RouteData.Values;
+
+    if (routeData["Controller"] != null)
+    {
+        TempData["Controller"] = routeData["Controller"];
+    }
+
+    if (routeData["Action"] != null)
+    {
+        TempData["Action"] = routeData["Action"];
+    }
+
+    if (routeData["Area"] != null)
+    {
+        TempData["Area"] = routeData["Area"];
+    }
+
+    if (routeData["Id"] != null)
+    {
+        TempData["Id"] = routeData["Id"];
+    }
+}
+
+<ul class="navbar-nav mr-auto">
+    @if (FullName == null)
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-route="register">@Localizer["Register"]</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-route="login">@Localizer["Login"]</a>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Details" asp-route-id="@Id">Welkom @FullName</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-route="logout">@Localizer["Logout"]</a>
+        </li>
+    }
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            @Localizer["Language"] (@Context.Session.GetString("culture"))
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="SetCulture" asp-route-culture="EN">English</a>
+            <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="SetCulture" asp-route-culture="NL">Nederlands</a>
+        </div>
+    </li>
+</ul>

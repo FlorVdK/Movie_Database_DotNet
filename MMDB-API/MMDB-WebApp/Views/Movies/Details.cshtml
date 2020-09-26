@@ -1,0 +1,161 @@
+﻿@model MMDB_WebApp.Models.MoviePutVM
+
+@{
+    string Id = null;
+    string roles = "";
+    ViewData["Title"] = "Details";
+
+    if (TempData.ContainsKey("StateData"))
+    {
+        Dictionary<string, string> stateData = (Dictionary<string, string>)TempData["StateData"];
+
+        Id = stateData["_Id"];
+        roles = stateData["_Roles"] as string;
+    }
+}
+
+@section Styles
+{
+    <style type="text/css">
+        body {
+            margin-top: 20px;
+        }
+
+        .comment-wrapper .panel-body {
+            max-height: 650px;
+            overflow: auto;
+        }
+
+        .comment-wrapper .media-list .media img {
+            width: 64px;
+            height: 64px;
+            border: 2px solid #e5e7e8;
+        }
+
+        .comment-wrapper .media-list .media {
+            border-bottom: 1px dashed #efefef;
+            margin-bottom: 25px;
+        }
+    </style>
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>@Model.Title</h4>
+    <hr />
+    @if (Model.Poster != null)
+    {
+        <img class="float-right" src="~/images/Posters/@Model.Poster" asp-append-version="true">
+    }
+    else
+    {
+        <img class="float-right" src="~/images/Posters/not_available.jpg">
+    }
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ReleaseDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ReleaseDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DirectorName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DirectorName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Actors)
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var Actor in Model.Actors)
+                {
+                    <li>
+                        <a asp-controller="Actors" asp-action="Details" asp-route-id="@Actor.Id">@Actor.Name</a>
+                    </li>
+                }
+            </ul>
+        </dd>
+    </dl>
+    <div class="row bootstrap snippets">
+        <div class="col-md-6 col-md-offset-2 col-sm-12">
+            <div class="comment-wrapper">
+                <div class="card card-info">
+                    <div class="card-header">
+                        Comment panel
+                    </div>
+                    <div class="card-body">
+
+                        @if (roles.Contains("user"))
+                        {
+                            <a asp-area="Comment" asp-controller="Comments" asp-action="create" asp-route-id="@Model.Id">post comment</a>
+                        }
+
+                        @if (Model.Comments.Count() != 0)
+                        {
+                            <ul class="media-list">
+                                @foreach (var Comment in Model.Comments)
+                                {
+                                    <li class="media">
+
+                                        @if (Comment.UserAvatar != null)
+                                        {
+                                            <img src="~/images/Avatars/@Comment.UserAvatar" class="img-circle avatar" alt="user profile image">
+                                        }
+                                        else
+                                        {
+                                            <img src="~/images/Avatars/no_avatar.png" class="img-circle avatar" alt="user profile image">
+                                        }
+                                        <div class="media-body">
+                                            <span class="text-muted float-right">
+                                                <small class="text-muted">@Comment.Date</small>
+                                            </span>
+                                            <strong class="text-success">@Comment.UserName</strong>
+                                            <p>
+                                                @Comment.CommentText
+                                            </p>
+                                        </div>
+                                    </li>
+
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p>No comments yet</p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div>
+    @if (roles.Contains("admin"))
+    {
+        <p>
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+            <a asp-action="Index">Back to List</a> |
+            <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+        </p>
+    }
+    else
+    {
+        <a asp-action="Index">Back to List</a>
+    }
+</div>

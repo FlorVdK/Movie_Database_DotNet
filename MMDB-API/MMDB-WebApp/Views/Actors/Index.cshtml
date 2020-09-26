@@ -1,0 +1,51 @@
+﻿@model IEnumerable<MMDB_WebApp.Models.ActorVM>
+
+@{
+    ViewData["Title"] = "Index";
+
+    string roles = "";
+    if (TempData.ContainsKey("StateData"))
+    {
+        Dictionary<string, string> stateData = (Dictionary<string, string>)TempData["StateData"];
+
+        roles = stateData["_Roles"] as string;
+    }
+    TempData.Keep();
+}
+
+<h1>Index</h1>
+
+@if (roles.Contains("admin"))
+{
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
+
+<div class="container">
+    <div class="row">
+        <h2 class="display-4">Movies</h2>
+    </div>
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-auto mb-3">
+                <div class="card">
+                    @if (item.Avatar != null)
+                    {
+                        <img class="poster-img" src="~/images/Avatars/@item.Avatar" asp-append-version="true">
+                    }
+                    else
+                    {
+                        <img src="~/images/Avatars/no_avatar.png">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                        <a asp-controller="Actors" asp-action="Details" asp-route-id="@item.Id" class="stretched-link">Details</a>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>

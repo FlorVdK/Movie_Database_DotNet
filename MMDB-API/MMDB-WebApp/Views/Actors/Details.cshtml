@@ -1,0 +1,81 @@
+﻿@model MMDB_WebApp.Models.ActorVM
+
+@{
+    ViewData["Title"] = "Details";
+
+    string roles = "";
+    if (TempData.ContainsKey("StateData"))
+    {
+        Dictionary<string, string> stateData = (Dictionary<string, string>)TempData["StateData"];
+
+        roles = stateData["_Roles"] as string;
+    }
+    TempData.Keep();
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>ActorVm</h4>
+    <hr />
+    @if (Model.Avatar != null)
+    {
+        <img class="float-right" src="~/images/Avatars/@Model.Avatar" asp-append-version="true">
+    }
+    else
+    {
+        <img class="float-right" src="~/images/Avatars/no_avatar.png">
+    }
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DateOfBirth)
+        </dd>
+    </dl>
+</div>
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model.Movies)
+        {
+            <div class="col-auto mb-3">
+                <div class="card">
+                    @if (item.Image != null)
+                    {
+                        <img class="poster-img" src="~/images/Posters/@item.Image" asp-append-version="true">
+                    }
+                    else
+                    {
+                        <img src="~/images/Posters/not_available.jpg">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                        <a asp-controller="Movies" asp-action="Details" asp-route-id="@item.Id" class="stretched-link">Details</a>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div>
+    @if (roles.Contains("admin"))
+    {
+        <p>
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+            <a asp-action="Index">Back to List</a> |
+            <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+        </p>
+    }
+    else
+    {
+        <a asp-action="Index">Back to List</a>
+    }
+</div>

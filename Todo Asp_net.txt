@@ -1,0 +1,40 @@
+Todo Asp_net
+    -detail page movies
+        -comments
+    -index movies
+    -index directors
+    -index movies
+    -put functionalitie in area
+    -enable jwt
+    -language
+    -validation
+
+CHECKLIST VERPLICHTE FUNCTIONALITEITEN & VEREISTEN
+    Richtlijnen Web Design & Usability en UX Design toegepast
+    /SSL geactiveerd
+    /Password hashing
+    /Parameter tampering
+    /MS SQL database
+    /Entity Framework Core en niet Entity Framework 6
+    /JWT authentication
+    /Enkel server‐side front‐end met Razor en JavaScript
+    /MVC patroon
+    /REST Web API
+    /Identity
+    /Data Transfer Objects (DTO) voor alle te versturen en ontvangen data (geen Models!)
+    /Repositories
+    /Landing page met relevante inhoud
+    /Login & registration pages
+    /Login met username & password
+    Extra authentication feature: social login, two‐factor authentication, forgotten password & reset ...
+    CRUD pages
+    Detail pages met relevante inhoud
+    /Minimaal één functionaliteit in een aparte area onderbrengen
+    Multi‐lingual: zowel inhoud als input validatie meldingen
+    /Search of filter functionaliteit
+    Input validation zowel client‐side als server‐side
+OPTIONEEL
+Authorization
+Versturen van e‐mails
+HATEOS REST API
+andere …

@@ -1,0 +1,78 @@
+﻿@model MMDB_WebApp.Areas.Comment.Models.CommentPutVM
+
+@{
+    ViewData["Title"] = "Create";
+    string Id = null;
+
+    if (TempData.ContainsKey("StateData"))
+    {
+        Dictionary<string, string> stateData = (Dictionary<string, string>)TempData["StateData"];
+
+        Id = stateData["_Id"];
+    }
+
+    string message = "";
+
+    if (TempData.ContainsKey("forbidden"))
+    {
+        message = "You're not authorized to " + (string)TempData["forbiddenMessage"];
+        TempData.Remove("forbidden");
+        TempData.Remove("forbiddenMessage");
+    }
+    else if (TempData.ContainsKey("error"))
+    {
+        message = "An unknown error occurred while " + (string)TempData["errorMessage"];
+        TempData.Remove("error");
+        TempData.Remove("errorMessage");
+    }
+    else if (TempData.ContainsKey("jwt"))
+    {
+        message = (string)TempData["jwtMessage"];
+        TempData.Remove("jwt");
+        TempData.Remove("jwtMessage");
+    }
+
+    TempData.Keep();
+}
+<div class="text-center">
+    @if (message != "")
+    {
+        <div class="alert alert-danger" role="alert">
+            @message
+        </div>
+    }
+    <h1 class="display-4">Welcome</h1>
+</div>
+
+<h1>Create</h1>
+
+<h4>CommentVM</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CommentText" class="control-label"></label>
+                <input asp-for="CommentText" class="form-control" />
+                <span asp-validation-for="CommentText" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="UserId" class="form-control" value="@Id" hidden />
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="MovieId" class="form-control" value="@ViewData["MovieId"]" hidden />
+                <span asp-validation-for="MovieId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
